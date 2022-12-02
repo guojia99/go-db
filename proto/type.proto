@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package types;
+
+option go_package = "./types";
+
+message FiledType {
+  string name = 1; // 类型名
+  int32 type = 2; // 数据类型
+  uint64 flag = 3; // 数据的标志
+  int32 num = 4; // 字段在table的排序位置
+  int64 len = 5; // 数据长度
+  int32 decimal = 6; // 数据小数长度
+  repeated string enum = 7; // 数据枚举值
+  bytes hash = 8; // 字段唯一标志
+  bytes table_hash = 9; // 所在的表唯一标志
+}
+
+message Table {
+  string name = 1; // 表名
+  string names = 2; // 别名
+  repeated FiledType filed = 3; // 对应字段
+  bytes hash = 4; // 表唯一标志
+}
+
+message Value{
+  int64 idx = 1; // 数据在分页的位置
+  bytes data = 2; // 原始数据
+  bytes type_hash = 3; // 对应字段唯一标志
+}
