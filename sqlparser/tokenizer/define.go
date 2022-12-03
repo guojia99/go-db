@@ -1,6 +1,7 @@
 package tokenizer
 
 // Punctuation copy like `https://www.cnblogs.com/moonSong/p/4989637.html`
+// https://en.wikipedia.org/wiki/Punctuation
 type Punctuation = string
 
 const (
@@ -31,12 +32,12 @@ const (
 	EqualGreater    Punctuation = `>=`
 
 	Space          Punctuation = ` `
-	NewLine        Punctuation = `\n`
-	JumpBeginLine  Punctuation = `\r`
-	Abdication     Punctuation = `\b`
-	HorizontalTabs Punctuation = `\t`
-	VerticalTabs   Punctuation = `\v`
-	FormFeed       Punctuation = `\f`
+	NewLine        Punctuation = "\n"
+	JumpBeginLine  Punctuation = "\r"
+	Abdication     Punctuation = "\b"
+	HorizontalTabs Punctuation = "\t"
+	VerticalTabs   Punctuation = "\v"
+	FormFeed       Punctuation = "\f"
 
 	Hashtag    Punctuation = `#`
 	Colon      Punctuation = `:`

@@ -1,7 +1,6 @@
 package tokenizer
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -84,16 +83,12 @@ Base:
 				}
 			}
 			tokenDealWith(TokenTypePunctuation)
-		case BackSlash:
-		case Dollar:
-		case At:
 		case "0":
 			if idx < length {
 				lastChar := string(str[idx])
 				switch lastChar {
 				case "x", "X":
 					idx++
-					fmt.Println(111)
 					goto HexNumber
 				}
 			}
@@ -109,7 +104,7 @@ Base:
 			tokenDealWith(TokenTypePunctuation)
 		case ParenLeft, ParenRight, BraceLeft, BraceRight, BracketLeft, BracketRight,
 			Hashtag, Colon, Semicolon, Question, Tilde, Percent, Caret, Ampersand,
-			Bar, Comma, Underscore, Equal:
+			Bar, Comma, Underscore, Equal, At, BackSlash, Dollar:
 			tokenDealWith(TokenTypePunctuation)
 		default:
 			if strings.Contains(capitalizationList, char) {
