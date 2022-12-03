@@ -16,7 +16,6 @@ func ParserTokens(str string) (tokens Tokens) {
 	if length == 0 {
 		return
 	}
-	tokens = make(Tokens, 0, length/5)
 	var (
 		tkStart, idx int
 		lastString   Punctuation
@@ -24,36 +23,24 @@ func ParserTokens(str string) (tokens Tokens) {
 	)
 
 	tokenDealWith := func(typ TokenType) {
-		if typ == TokenTypeString {
-			switch lastString {
-			case DoubleQuotes:
-				typ = TokenTypeDoubleQuoteString
-			case ApostropheQuote:
-				typ = TokenTypeApostropheQuoteString
-			}
-		}
 		if idx-tkStart != 0 {
-			if len(tokens) > 0 && tokens[len(tokens)-1].Type == typ && combineOkay(typ) {
-				tokens[len(tokens)-1].Value = str[tkStart-len(tokens[len(tokens)-1].Value) : idx]
-				tkStart = idx
-				return
-			}
 			tk := Token{Value: str[tkStart:idx], Type: typ}
 			tokens = append(tokens, tk)
 			tkStart = idx
 		}
 	}
 
-	addStr := func() string {
+	getCurStrAndNext := func() string {
 		char := string(str[idx])
 		idx++
 		return char
 	}
 
+	// Base to call all start punt
 Base:
 	for idx < length {
 		lasNumber, lastString = "", ""
-		char := addStr()
+		char := getCurStrAndNext()
 		switch char {
 		case ForwardSlash:
 			if idx < length && string(str[idx]) == Asterisk {
@@ -93,7 +80,7 @@ Base:
 				}
 			}
 			goto Number
-		case ExclamationMark, Less, EqualGreater:
+		case ExclamationMark, Less, Greater:
 			if idx < length {
 				if lastChar := string(str[idx]); lastChar == Equal {
 					idx++
@@ -118,9 +105,10 @@ Base:
 	}
 	goto End
 
+	// Comment to call like end `/* abc */`
 Comment:
 	for idx < length {
-		switch addStr() {
+		switch getCurStrAndNext() {
 		case Asterisk:
 			if idx < length && string(str[idx]) == ForwardSlash {
 				idx++
@@ -134,7 +122,7 @@ Comment:
 
 QuoteString:
 	for idx < length {
-		switch addStr() {
+		switch getCurStrAndNext() {
 		case lastString:
 			tokenDealWith(TokenTypeString)
 			goto Base
@@ -152,7 +140,7 @@ QuoteString:
 
 MinusSignEOL:
 	for idx < length {
-		switch addStr() {
+		switch getCurStrAndNext() {
 		case NewLine:
 			tokenDealWith(TokenTypeComment)
 			goto Base
@@ -171,7 +159,7 @@ Number:
 			}
 		}
 
-		char := addStr()
+		char := getCurStrAndNext()
 		if strings.Contains(numberList, char) {
 			continue
 		}
@@ -187,7 +175,7 @@ Number:
 
 NumberDot:
 	for idx < length {
-		char := addStr()
+		char := getCurStrAndNext()
 		if strings.Contains(numberList, char) {
 			continue
 		}
@@ -200,7 +188,7 @@ NumberDot:
 
 HexNumber:
 	for idx < length {
-		char := addStr()
+		char := getCurStrAndNext()
 		if strings.Contains(hexNumberList, char) {
 			continue
 		}
@@ -213,7 +201,7 @@ HexNumber:
 
 Spaces:
 	for idx < length {
-		switch addStr() {
+		switch getCurStrAndNext() {
 		case Space, NewLine, JumpBeginLine, Abdication, HorizontalTabs, VerticalTabs, FormFeed:
 		default:
 			idx--
@@ -226,7 +214,7 @@ Spaces:
 
 Word:
 	for idx < length {
-		char := addStr()
+		char := getCurStrAndNext()
 		if strings.Contains(numberList+capitalizationList+Underscore, char) {
 			continue
 		}

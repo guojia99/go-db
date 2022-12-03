@@ -35,6 +35,18 @@ func TestParserTokens(t *testing.T) {
 			name: "calc_number",
 			data: "1+2+3.444-4.5+1>=1",
 		},
+		{
+			name: "calc_number_2",
+			data: "1+2+3.444-4.5+1>=1 $1, 2+3*%",
+		},
+		{
+			name: "string",
+			data: "`TEST`'TEST'\"TEST\"",
+		},
+		{
+			name: "comment",
+			data: "abc /*abc*/ abc",
+		},
 	}
 
 	for _, tt := range tests {

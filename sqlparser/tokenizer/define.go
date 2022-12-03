@@ -10,7 +10,7 @@ const (
 	Quotes          Punctuation = `'`
 	DoubleQuotes    Punctuation = `"`
 	ApostropheQuote Punctuation = "`"
-	ForwardSlash    Punctuation = `/'`
+	ForwardSlash    Punctuation = `/`
 	BackSlash       Punctuation = `\`
 	DoubleBackSlash Punctuation = `\\`
 
@@ -59,18 +59,16 @@ const (
 type TokenType int
 
 const (
-	TokenTypeNot                   TokenType = iota // not
-	TokenTypeSpace                                  // ` ` space
-	TokenTypeNumber                                 // `123`
-	TokenTypeDollarNumber                           // `$123` will int
-	TokenTypeString                                 // `'abc'`
-	TokenTypeDoubleQuoteString                      // `"abc"`
-	TokenTypeApostropheQuoteString                  // ``abc``
-	TokenTypeWord                                   // `abc`
-	TokenTypePunctuation                            // like Punctuation
-	TokenTypeBoolWord                               // `true` or `false`
-	TokenTypeNullWord                               // `NULL` or `null`
-	TokenTypeComment                                // `/* Abc */`
+	TokenTypeNot          TokenType = iota // not
+	TokenTypeSpace                         // ` ` space
+	TokenTypeNumber                        // `123`
+	TokenTypeDollarNumber                  // `$123` will int
+	TokenTypeString                        // `'abc'` or `"abc"` or ``abc``
+	TokenTypeWord                          // `abc`
+	TokenTypePunctuation                   // like Punctuation
+	TokenTypeBoolWord                      // `true` or `false`
+	TokenTypeNullWord                      // `NULL` or `null`
+	TokenTypeComment                       // `/* Abc */`
 )
 
 func (tkp TokenType) String() string {
@@ -79,10 +77,6 @@ func (tkp TokenType) String() string {
 		return "space"
 	case TokenTypeString:
 		return "string"
-	case TokenTypeDoubleQuoteString:
-		return "dq_string"
-	case TokenTypeApostropheQuoteString:
-		return "aq_string"
 	case TokenTypeNumber:
 		return "number"
 	case TokenTypePunctuation:
