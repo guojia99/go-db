@@ -50,18 +50,19 @@ type SqlToken struct {
 	Value   string
 	KeyWord keywords.KeyWord
 	Offset  int
+	EndSet  int
 	Column  int
 }
 
 func (s SqlToken) IsKeyWord() bool { return s.KeyWord != keywords.KwEOF }
 
 func parserSqlTokens(str string) (out []SqlToken) {
-	idx := 0
+	idx, lastOffset := 0, 0
 	newToken := func(typ SqlTokenType, value string, kw keywords.KeyWord, offset int) SqlToken {
 		idx++
-		return SqlToken{
-			Type: typ, Value: value, Offset: offset, Column: idx, KeyWord: kw,
-		}
+		tk := SqlToken{Type: typ, Value: value, Column: idx, KeyWord: kw, Offset: lastOffset, EndSet: offset}
+		lastOffset = offset
+		return tk
 	}
 
 	parserTokenIterator(str, func(typ TokenType, val string, curIdx int) error {
