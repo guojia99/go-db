@@ -47,6 +47,18 @@ func TestParserTokens(t *testing.T) {
 			name: "comment",
 			data: "abc /*abc*/ abc",
 		},
+		{
+			name: "comment2",
+			data: "abc /*abc -0-0- * *",
+		},
+		{
+			name: "comment3",
+			data: "abc //abc \n abc",
+		},
+		{
+			name: "comment3",
+			data: "abc ---adb",
+		},
 	}
 
 	for _, tt := range tests {
@@ -54,7 +66,7 @@ func TestParserTokens(t *testing.T) {
 			fmt.Println(tt.data)
 			var newTks Tokens
 			for _, tk := range ParserTokens(tt.data) {
-				if tk.Type == TokenTypeSpace {
+				if tk.Type == TTSpace {
 					continue
 				}
 				newTks = append(newTks, tk)
