@@ -1,3 +1,9 @@
+/*
+ *  * Copyright (c) 2023 guojia99 All rights reserved.
+ *  * Created: 2023/2/26 下午5:22.
+ *  * Author: guojia(https://github.com/guojia99)
+ */
+
 package tokenizer
 
 import (
@@ -54,6 +60,18 @@ type SqlToken struct {
 	Column  int
 }
 
+func (s SqlToken) String() string {
+	switch s.Type {
+	case SttString:
+		return `'` + strings.Replace(s.Value, `"`, `""`, -1) + `'`
+	case SttValue:
+		return `"` + strings.Replace(s.Value, `"`, `""`, -1) + `"`
+	}
+	return s.Value
+}
+
+func (s SqlToken) IsEmpty() bool { return len(s.Value) == 0 }
+
 func (s SqlToken) IsKeyWord() bool { return s.KeyWord != keywords.KwEOF }
 
 func parserSqlTokens(str string) (out []SqlToken) {
@@ -65,6 +83,7 @@ func parserSqlTokens(str string) (out []SqlToken) {
 		return tk
 	}
 
+	//lastKeyWordToken := SqlToken{}
 	parserTokenIterator(str, func(typ TokenType, val string, curIdx int) error {
 		switch typ {
 		case TTNumber:
@@ -77,11 +96,23 @@ func parserSqlTokens(str string) (out []SqlToken) {
 			out = append(out, newToken(SttString, val[1:len(val)-1], keywords.KwEOF, curIdx))
 		case TTWord:
 			kw := keywords.GetKeyWord(val)
-			if kw != keywords.KwEOF {
-				out = append(out, newToken(SttKeyword, val, kw, curIdx))
+			if kw == keywords.KwEOF {
+				out = append(out, newToken(SttValue, val, keywords.KwEOF, curIdx))
 				return nil
 			}
-			out = append(out, newToken(SttValue, val, keywords.KwEOF, curIdx))
+
+			// todo 多个的组合key`
+
+			switch kw {
+			case keywords.KwIs:
+
+			case keywords.KwNot:
+
+			}
+
+			out = append(out, newToken(SttKeyword, val, kw, curIdx))
+			return nil
+
 		case TTPunctuation:
 			out = append(out, newToken(SttPunc, val, keywords.KwEOF, curIdx))
 		case TTComment, TTSpace:

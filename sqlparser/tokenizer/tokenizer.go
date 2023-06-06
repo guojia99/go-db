@@ -1,3 +1,9 @@
+/*
+ *  * Copyright (c) 2023 guojia99 All rights reserved.
+ *  * Created: 2023/2/26 下午5:22.
+ *  * Author: guojia(https://github.com/guojia99)
+ */
+
 package tokenizer
 
 import (
@@ -34,8 +40,10 @@ const (
 	PuncEqual           Punc = `=`
 	PuncUnEqual         Punc = `!=`
 	PuncLess            Punc = `<`
+	PuncDoubleLess      Punc = `<<` //todo
 	PuncEqualLess       Punc = `<=`
 	PuncGreater         Punc = `>`
+	PuncDoubleGreater   Punc = `>>` //todo
 	PuncEqualGreater    Punc = `>=`
 	PuncSpace           Punc = ` `
 	PuncNewLine         Punc = "\n"
@@ -55,6 +63,7 @@ const (
 	PuncAmpersand       Punc = `&`
 	PuncAsterisk        Punc = `*`
 	PuncBar             Punc = `|`
+	PuncDoubleBar       Punc = `||` //todo
 	PuncComma           Punc = `,`
 	PuncUnderscore      Punc = `_`
 	PuncPoint           Punc = `.`
@@ -168,7 +177,6 @@ Base:
 				lastChar := string(str[idx])
 				if lastChar == PuncMinusSign {
 					goto MinusSignComment
-					continue
 				}
 				tokenDealWith(TTPunctuation)
 			}

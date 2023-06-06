@@ -4,4 +4,4 @@
  *  * Author: guojia(https://github.com/guojia99)
  */
 
-package sqlparser
+package ast
